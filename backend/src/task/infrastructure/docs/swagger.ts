@@ -44,5 +44,6 @@ export const options = {
   },
   apis: [
     "./src/task/infrastructure/routes/task.routes.ts",
+    "./src/user/infrastructure/routes/user.routes.ts",
   ],
 };
