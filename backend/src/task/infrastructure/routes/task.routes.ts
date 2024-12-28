@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { MongoRepository } from '../repository/mongo';
 import { TaskUseCase } from '../../../task/application/taskUseCase';
 import { TaskController } from '../controllers/task.ctrl';
+import { createTaskSchema, handleValidationErrors } from '../utils/validation.schemas';
 
 const router = Router();
 const taskRepository = new MongoRepository();
@@ -64,7 +65,7 @@ const taskController = new TaskController(taskUseCase);
  *       500:
  *         description: Error creating the TASK
  */
-router.post('/', taskController.create);
+router.post('/', createTaskSchema, handleValidationErrors,  taskController.create);
 /**
  * @swagger
  * /tasks:
@@ -149,7 +150,7 @@ router.get('/:id', taskController.getById);
  *       500:
  *         description: Error updating the task
  */
-router.put('/:id', taskController.update);
+router.put('/:id',  taskController.update);
 /**
  * @swagger
  * /tasks/{id}:
