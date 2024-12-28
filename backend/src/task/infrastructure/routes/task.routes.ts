@@ -10,5 +10,9 @@ const taskUseCase = new TaskUseCase(taskRepository);
 const taskController = new TaskController(taskUseCase);
 
 router.post('/', taskController.create);
+router.get('/', taskController.get);
+router.put('/:id', taskController.update);
+router.get('/:id', taskController.getById);
+router.delete('/:id', taskController.delete);
 
 export default router;

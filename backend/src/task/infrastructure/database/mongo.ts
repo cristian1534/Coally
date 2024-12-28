@@ -15,7 +15,7 @@ export const initDB = async (res?: Response): Promise<void> => {
     if (res) httpResponse.Ok(res, "Connected to DB.");
     
   } catch (error: any) {
-    console.log("Error connecting to DB");
+    console.log("Error connecting to DB", error);
     if (res) httpResponse.Ok(res, "Error connecting to DB.");
   }
 };

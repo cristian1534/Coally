@@ -8,4 +8,27 @@ export class MongoRepository implements TaskRepository {
     await newTask.save();
     return newTask;
   }
+
+  async get(): Promise<any> {
+    const tasks = Task.find();
+    return tasks;
+  }
+
+  async update(id: string, task: ITaskEntity): Promise<any> {
+    const updatedTask = await Task.findByIdAndUpdate( id, task, {
+      new: true,
+      runValidators: true,
+    });
+    return updatedTask;
+  }
+
+  async getById(id: string): Promise<any> {
+    const task = Task.findById(id);
+    return task;
+  }
+
+  async delete(id: string): Promise<any> {
+    const task = Task.findByIdAndDelete(id);
+    return task;
+  }
 }
