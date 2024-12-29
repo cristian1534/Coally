@@ -1,10 +1,8 @@
-'use client'
+"use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useApiContext } from "../context/ApiContext";
 import { TTask } from "../types";
-
-
 
 export const TaskList = () => {
   const { getAll, remove } = useApiContext();
@@ -14,18 +12,25 @@ export const TaskList = () => {
   useEffect(() => {
     setIsLoading(true);
     const fetchTasks = async () => {
-      const data  = await getAll();
+      const data = await getAll();
       setTasks(data);
     };
 
     fetchTasks();
     setIsLoading(false);
-  }, [getAll, tasks]); 
+  }, [getAll, tasks]);
 
   return (
     <div>
       {isLoading && (
-        <div className="text-center text-gray-400 font-sans font-semibold">Loading tasks...</div>
+        <div className="text-center text-gray-400 font-sans font-semibold">
+          Loading tasks...
+        </div>
+      )}
+      {tasks.length === 0 && !isLoading && (
+        <div className="text-gray-400 text-center font-sans font-bold">
+          No Tasks to Show
+        </div>
       )}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-20">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -49,22 +54,30 @@ export const TaskList = () => {
             </tr>
           </thead>
           <tbody>
-            
             {tasks.map((task) => (
-              <tr key={task.title} className="bg-white text-gray-400 border-b hover:text-gray-500 font-medium">
+              <tr
+                key={task.title}
+                className="bg-white text-gray-400 border-b hover:text-gray-500 font-medium"
+              >
                 <th scope="row" className="px-6 py-4 font-medium">
                   {task.title}
                 </th>
                 <td className="px-6 py-4">{task.description}</td>
-                <td className={`px-6 py-4 ${task.status && "line-through"}`}>{task.status ? "Completed" : "Pending"}</td>
+                <td className={`px-6 py-4 ${task.status && "line-through"}`}>
+                  {task.status ? "Completed" : "Pending"}
+                </td>
                 <td className="px-6 py-4">
-                  <Link href={`/tasks/${task._id}`} className="font-medium text-green-600 hover:underline">
+                  <Link
+                    href={`/tasks/${task._id}`}
+                    className="font-medium text-green-600 hover:underline"
+                  >
                     Edit
                   </Link>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <button className="font-medium text-red-600 hover:underline"
-                  onClick={() => task._id && remove(task._id)}
+                  <button
+                    className="font-medium text-red-600 hover:underline"
+                    onClick={() => task._id && remove(task._id)}
                   >
                     Delete
                   </button>

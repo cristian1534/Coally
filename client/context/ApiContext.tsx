@@ -10,7 +10,7 @@ import {
   IResponse,
   IRemoveResponse,
   IGetByIdResponse,
-  IUpdateResponse
+  IUpdateResponse,
 } from "../types";
 
 type ApiContextType = {
@@ -32,6 +32,8 @@ export const ApiContextProvider = ({
 }) => {
   const [tasks, setTasks] = useState<TTask[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  
 
   const signin = async (data: TSignIn) => {
     try {
@@ -138,6 +140,7 @@ export const ApiContextProvider = ({
       throw new Error("Error updating task", err as Error);
     }
   };
+
 
   return (
     <ApiContext.Provider
