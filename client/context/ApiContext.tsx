@@ -1,19 +1,27 @@
-'use client'
+"use client";
 import React, { createContext, useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { TSignIn, TTask, TSignInResponse } from "../types";
-
+import {
+  TSignIn,
+  TTask,
+  TSignInResponse,
+  TCreateResponse,
+  IResponse,
+  IRemoveResponse,
+  IGetByIdResponse,
+  IUpdateResponse
+} from "../types";
 
 type ApiContextType = {
-
-  getAll: () => Promise<{ data: TTask[] }>;
-  remove: (id: string) => Promise<void>;
+  tasks: TTask[];
+  error: string | null;
+  getAll: () => Promise<TTask[]>;
+  remove: (id: string) => Promise<IRemoveResponse>;
   create: (data: TTask) => Promise<TTask>;
   signin: (data: TSignIn) => Promise<TSignInResponse>;
-  getById: (id: string) => Promise<TTask>;
-  update: (id: string, data: TTask) => Promise<TTask>;
-
+  getById: (id: string) => Promise<IGetByIdResponse>;
+  update: (id: string, data: TTask) => Promise<IUpdateResponse>;
 };
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
 
@@ -27,7 +35,7 @@ export const ApiContextProvider = ({
 
   const signin = async (data: TSignIn) => {
     try {
-      const response = await axios.post(
+      const response = await axios.post<TSignInResponse>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/users/auth`,
         data
       );
@@ -41,7 +49,7 @@ export const ApiContextProvider = ({
   const create = async (data: TTask) => {
     const token = Cookies.get("token");
     try {
-      const response = await axios.post(
+      const response = await axios.post<TCreateResponse>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/tasks`,
         data,
         {
@@ -50,10 +58,8 @@ export const ApiContextProvider = ({
           },
         }
       );
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-      return response.data;
+      window.location.reload();
+      return response.data.data;
     } catch (err) {
       throw new Error("Error creating task", err as Error);
     }
@@ -62,7 +68,7 @@ export const ApiContextProvider = ({
   const getAll = async () => {
     const token = Cookies.get("token");
     try {
-      const response = await axios.get(
+      const response = await axios.get<IResponse>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/tasks`,
         {
           headers: {
@@ -70,17 +76,17 @@ export const ApiContextProvider = ({
           },
         }
       );
-      return response.data;
+
+      return response.data.data;
     } catch (err) {
-      throw new Error("Error retrieving tasks");
-      return err;
+      throw new Error("Error retrieving tasks", err as Error);
     }
   };
 
   const remove = async (id: string) => {
     const token = Cookies.get("token");
     try {
-      const response = await axios.delete(
+      const response = await axios.delete<IRemoveResponse>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/tasks/${id}`,
         {
           headers: {
@@ -100,7 +106,7 @@ export const ApiContextProvider = ({
   const getById = async (id: string) => {
     const token = Cookies.get("token");
     try {
-      const response = await axios.get(
+      const response = await axios.get<IGetByIdResponse>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/tasks/${id}`,
         {
           headers: {
@@ -118,7 +124,7 @@ export const ApiContextProvider = ({
   const update = async (id: string, data: TTask) => {
     const token = Cookies.get("token");
     try {
-      const response = await axios.put(
+      const response = await axios.put<IUpdateResponse>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/tasks/${id}`,
         data,
         {
@@ -135,7 +141,6 @@ export const ApiContextProvider = ({
 
   return (
     <ApiContext.Provider
-
       value={{
         tasks,
         error,
@@ -152,17 +157,12 @@ export const ApiContextProvider = ({
   );
 };
 
-
 export const useApiContext = () => {
-
   const context = useContext(ApiContext);
 
   if (!context) {
-
     throw new Error("useApiContext must be used within an ApiProvider");
-
   }
 
   return context;
-
 };

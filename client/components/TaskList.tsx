@@ -14,13 +14,13 @@ export const TaskList = () => {
   useEffect(() => {
     setIsLoading(true);
     const fetchTasks = async () => {
-      const data = await getAll();
-      setTasks((data as { data: TTask[] }).data);
+      const data  = await getAll();
+      setTasks(data);
     };
 
     fetchTasks();
     setIsLoading(false);
-  }, [getAll]); 
+  }, [getAll, tasks]); 
 
   return (
     <div>
