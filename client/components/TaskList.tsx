@@ -56,7 +56,7 @@ export const TaskList = () => {
                   {task.title}
                 </th>
                 <td className="px-6 py-4">{task.description}</td>
-                <td className="px-6 py-4">{task.status ? "Completed" : "Pending"}</td>
+                <td className={`px-6 py-4 ${task.status && "line-through"}`}>{task.status ? "Completed" : "Pending"}</td>
                 <td className="px-6 py-4">
                   <Link href={`/tasks/${task._id}`} className="font-medium text-green-600 hover:underline">
                     Edit

@@ -60,7 +60,9 @@ export const UpdateTaskForm = ({ taskId }: UpdateProps) => {
 
   return (
     <div className="max-w-lg mx-auto mt-10">
-      <h2 className="text-2xl font-bold text-center text-gray-600 mb-6">Edit Task</h2>
+      <h2 className="text-2xl font-bold text-center text-gray-600 mb-6">
+        Edit Task
+      </h2>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -110,15 +112,17 @@ export const UpdateTaskForm = ({ taskId }: UpdateProps) => {
             htmlFor="status"
             className="block text-sm font-semibold text-gray-700"
           >
-            Status
+            Completed
           </label>
-          <input
-            type="text"
+          <select
             id="status"
             {...register("status", { required: "Status is required" })}
             className="w-full px-4 py-2 border-b-2 border-gray-300 focus:ring-0 focus:outline-none focus:border-yellow-400 text-gray-400"
-            defaultValue={task?.status ? "Completed" : "Pending"}
-          />
+            defaultValue={task?.status ? "Completed": "Pending"}
+          >
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
           {errors.status && (
             <p className="text-red-500 text-sm">{errors.status.message}</p>
           )}
