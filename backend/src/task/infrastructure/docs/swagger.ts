@@ -4,9 +4,8 @@ const nodeEnv = process.env.NODE_ENV;
 
 const URL =
   nodeEnv === "production"
-    ? "https://keym-backend-service.onrender.com"
+    ? "https://coally.onrender.com"
     : "http://localhost:4000";
-
 ``;
 export const options = {
   definition: {
