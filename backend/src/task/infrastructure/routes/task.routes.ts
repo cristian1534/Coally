@@ -127,14 +127,44 @@ router.get('/:id', validateToken, taskController.getById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/TASK'  
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the task
+ *               description:
+ *                 type: string
+ *                 description: The description of the task
+ *               status:
+ *                 type: boolean
+ *                 description: The status of the task, true for completed, false for pending
+ *             required:
+ *               - status
+ *             example:
+ *               title: "Updated task title"
+ *               description: "Updated task description"
+ *               status: true
  *     responses:
  *       200:
  *         description: Task successfully updated
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/TASK'  
+ *               type: object
+ *               properties:
+ *                 title:
+ *                   type: string
+ *                   description: The title of the task
+ *                 description:
+ *                   type: string
+ *                   description: The description of the task
+ *                 status:
+ *                   type: boolean
+ *                   description: The status of the task
+ *               example:
+ *                 title: "Updated task title"
+ *                 description: "Updated task description"
+ *                 status: false
  *       400:
  *         description: Invalid input
  *       404:
