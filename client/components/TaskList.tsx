@@ -3,6 +3,8 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useApiContext } from "../context/ApiContext";
 import { TTask } from "../types";
+import { motion } from "framer-motion";
+import { fadeIn } from "../utils/variants";
 
 export const TaskList = () => {
   const { getAll, remove } = useApiContext();
@@ -53,7 +55,12 @@ export const TaskList = () => {
               </th>
             </tr>
           </thead>
-          <tbody>
+          <motion.tbody
+            variants={fadeIn({ direction: "right", delay: 0.3 })}
+            initial="hidden"
+            whileInView={"show"}
+            viewport={{ once: false, amount: 0.7 }}
+          >
             {tasks.map((task) => (
               <tr
                 key={task.title}
@@ -84,7 +91,7 @@ export const TaskList = () => {
                 </td>
               </tr>
             ))}
-          </tbody>
+          </motion.tbody>
         </table>
       </div>
     </div>

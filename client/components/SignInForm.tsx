@@ -5,7 +5,8 @@ import { TSignInResponse, TSignIn } from "../types";
 import { useApiContext } from "../context/ApiContext";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-
+import { motion } from "framer-motion";
+import { fadeIn } from "../utils/variants";
 
 export const LogInForm = () => {
   const { signin } = useApiContext();
@@ -78,9 +79,13 @@ export const LogInForm = () => {
           {message}
         </div>
       )}
-      <form
+      <motion.form
         className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full space-y-5"
         onSubmit={handleSubmit(onSubmit)}
+        variants={fadeIn({ direction: "right", delay: 0.3 })}
+        initial="hidden"
+        whileInView={"show"}
+        viewport={{ once: false, amount: 0.7 }}
       >
         <h2 className="text-xl font-semibold text-center text-gray-500">
           Sign In
@@ -145,7 +150,7 @@ export const LogInForm = () => {
             {loading ? "Sending..." : "Send"}
           </button>
         </div>
-      </form>
+      </motion.form>
     </div>
   );
 };
