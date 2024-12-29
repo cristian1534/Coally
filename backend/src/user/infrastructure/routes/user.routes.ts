@@ -33,14 +33,13 @@ const userController = new UserController(userUseCase);
  *         email:
  *           type: string
  *           description: USER's email
- *         password: 
+ *         password:
  *           type: string
  *           description: USER's password
  *       example:
  *         email: "christian@gmail.com"
  *         password: "admin123"
- * 
- * 
+ *
  *     Register:
  *       type: object
  *       required:
@@ -56,6 +55,23 @@ const userController = new UserController(userUseCase);
  *       example:
  *         email: "cristian@gmail.com"
  *         password: "admin123"
+ *
+ *     Login:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: USER's email.
+ *         password:
+ *           type: string
+ *           description: USER's password.
+ *       example:
+ *         email: "cristian@gmail.com"
+ *         password: "admin123"
+ *
  *
  */
 
@@ -112,4 +128,34 @@ router.post(
  *         description: Error when fetching USERS
  */
 router.get("/", userController.get);
+
+/**
+ * @swagger
+ * /users/auth:
+ *   post:
+ *     security: []
+ *     summary: Login USER
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Login'
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Login'
+ *       500:
+ *         description: Error when LOGGING IN USER
+ */
+router.post(
+  "/auth",
+  createUserSchema,
+  handleValidationErrors,
+  userController.login
+);
 export default router;

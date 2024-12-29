@@ -3,6 +3,7 @@ import { MongoRepository } from '../repository/mongo';
 import { TaskUseCase } from '../../../task/application/taskUseCase';
 import { TaskController } from '../controllers/task.ctrl';
 import { createTaskSchema, handleValidationErrors } from '../utils/validation.schemas';
+import { validateToken } from '../../../user/utils/token.validator';
 
 const router = Router();
 const taskRepository = new MongoRepository();
@@ -65,7 +66,7 @@ const taskController = new TaskController(taskUseCase);
  *       500:
  *         description: Error creating the TASK
  */
-router.post('/', createTaskSchema, handleValidationErrors,  taskController.create);
+router.post('/', validateToken, createTaskSchema, handleValidationErrors,  taskController.create);
 /**
  * @swagger
  * /tasks:
@@ -86,7 +87,7 @@ router.post('/', createTaskSchema, handleValidationErrors,  taskController.creat
  *       500:
  *         description: Error retrieving tasks
  */
-router.get('/', taskController.get);
+router.get('/', validateToken, taskController.get);
 /**
  * @swagger
  * /tasks/{id}:
@@ -114,7 +115,7 @@ router.get('/', taskController.get);
  *       500:
  *         description: Error retrieving the task
  */
-router.get('/:id', taskController.getById);
+router.get('/:id', validateToken, taskController.getById);
 /**
  * @swagger
  * /tasks/{id}:
@@ -150,7 +151,7 @@ router.get('/:id', taskController.getById);
  *       500:
  *         description: Error updating the task
  */
-router.put('/:id',  taskController.update);
+router.put('/:id', validateToken, taskController.update);
 /**
  * @swagger
  * /tasks/{id}:
@@ -174,6 +175,6 @@ router.put('/:id',  taskController.update);
  *       500:
  *         description: Error deleting the task
  */
-router.delete('/:id', taskController.delete);
+router.delete('/:id',validateToken, taskController.delete);
 
 export default router;

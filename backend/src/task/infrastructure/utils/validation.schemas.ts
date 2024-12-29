@@ -21,6 +21,7 @@ export const createUserSchema = [
     .withMessage("Password must be at least 8 characters long"),
 ];
 
+
 export const handleValidationErrors = (
   req: Request,
   res: Response,

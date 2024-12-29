@@ -10,7 +10,12 @@ export class MongoRepository implements UserRepository {
   }
 
   async get(): Promise<IUserEntity[]> {
-    const users = User.find();
+    const users = User.find().select("-password");
     return users;
+  }
+
+  async getByEmail(email: string): Promise<IUserEntity | null> {
+    const user = User.findOne({ email });
+    return user;
   }
 }
