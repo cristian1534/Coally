@@ -1,13 +1,13 @@
 'use client'
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { getAll, remove } from "../lib/api";
+import { useApiContext } from "../context/ApiContext";
 import { TTask } from "../types";
 
 
 
 export const TaskList = () => {
-
+  const { getAll, remove } = useApiContext();
   const [tasks, setTasks] = useState<TTask[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -20,7 +20,7 @@ export const TaskList = () => {
 
     fetchTasks();
     setIsLoading(false);
-  }, []); 
+  }, [getAll]); 
 
   return (
     <div>

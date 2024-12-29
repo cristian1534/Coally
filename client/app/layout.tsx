@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "../components/Header";
+import { ApiContextProvider } from "../context/ApiContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,8 +29,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        {children}
+        <ApiContextProvider>
+          <main className="flex flex-col h-screen overflow-y-auto">
+            <Header />
+            {children}
+          </main>
+        </ApiContextProvider>
       </body>
     </html>
   );

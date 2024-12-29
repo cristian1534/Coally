@@ -1,16 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { TSignIn } from "../types";
-import { signin } from "../lib/api";
+import { TSignInResponse, TSignIn } from "../types";
+import { useApiContext } from "../context/ApiContext";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-interface SignInResponse {
-  data: string;
-}
 
 export const LogInForm = () => {
+  const { signin } = useApiContext();
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,7 +28,7 @@ export const LogInForm = () => {
     setError(null);
 
     try {
-      const result = (await signin(data)) as SignInResponse;
+      const result = (await signin(data)) as TSignInResponse;
 
       if (result?.data) {
         Cookies.set("token", result.data, { expires: 7, path: "" });

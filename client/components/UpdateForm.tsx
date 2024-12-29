@@ -1,9 +1,8 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { getById, update } from "../lib/api";
+import { useApiContext } from "../context/ApiContext";
 import { TTask } from "../types/index";
 
 interface UpdateProps {
@@ -11,6 +10,7 @@ interface UpdateProps {
 }
 
 export const UpdateTaskForm = ({ taskId }: UpdateProps) => {
+  const { getById, update } = useApiContext();
   const [task, setTask] = useState<TTask | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -26,7 +26,7 @@ export const UpdateTaskForm = ({ taskId }: UpdateProps) => {
     const fetchTask = async () => {
       try {
         const data = await getById(taskId);
-        setTask((data as { data: TTask }).data);
+        setTask((data as unknown as { data: TTask }).data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching task:", error);
@@ -37,7 +37,7 @@ export const UpdateTaskForm = ({ taskId }: UpdateProps) => {
     if (taskId) {
       fetchTask();
     }
-  }, [taskId, reset]);
+  }, [taskId, reset, getById]);
 
   const onSubmit = async (data: TTask) => {
     try {

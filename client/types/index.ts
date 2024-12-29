@@ -9,3 +9,9 @@ export type TTask = {
   description: string;
   status?: boolean;
 };
+
+export type TSignInResponse = {
+  status: number;
+  statusMsg: string;
+  data?: string;
+}

@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { TTask } from "../types";
-import { create } from "../lib/api";
+import { useApiContext } from "../context/ApiContext";
+
 
 export const TaskForm = () => {
+  const { create } = useApiContext();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
