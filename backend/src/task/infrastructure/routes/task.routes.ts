@@ -29,18 +29,9 @@ const taskController = new TaskController(taskUseCase);
  *         description:
  *           type: string
  *           description: Task's description
- *         status:
- *           type: boolean
- *           description: Task's status
- *         createdAt:
- *           type: string
- *           format: date-time
- *           description: Task's creation date
  *       example:
  *         title: "Coding a new project"
  *         description: "Coding a new project with Node.js"
- *         status: true
- *         createdAt: "2021-09-01T00:00:00.000Z"
  *
  * /tasks:
  *   post:
