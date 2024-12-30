@@ -23,9 +23,6 @@ Currently I am available to work %100 remotely at any time of the day. Looking 
 continuing growing up with new technologies either in Backend or Frontend development as could be needed. 
 Besides MERN Stack I like to work with micro services on Docker, TS, with some DevOps concepts such as CI/CD and Testing, Scrum as Jira, Git, Bitbucket and so on.
 
-I attach this link for my references regarding Resume: 
-https://europa.eu/europass/eportfolio/api/eprofile/shared-profile/cristian-machuca/aca2ec36-40d7-49ea-ac76-26ca51fa1e4e?view=html
-
 
 
 ## Deployment Swagger Documentation.
