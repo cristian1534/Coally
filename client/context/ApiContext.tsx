@@ -20,6 +20,7 @@ type ApiContextType = {
   remove: (id: string) => Promise<IRemoveResponse>;
   create: (data: TTask) => Promise<TTask>;
   signin: (data: TSignIn) => Promise<TSignInResponse>;
+  signup: (data: TSignIn) => Promise<TSignInResponse>;
   getById: (id: string) => Promise<IGetByIdResponse>;
   update: (id: string, data: TTask) => Promise<IUpdateResponse>;
 };
@@ -35,6 +36,19 @@ export const ApiContextProvider = ({
 
   
 
+  const signup = async (data: TSignIn) => {
+    try {
+      const response = await axios.post<TSignInResponse>(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/users`,
+        data
+      );
+      return response.data;
+    } catch (err) {
+      setError("Error signing up");
+      throw new Error("Invalid Credentials", err as Error);
+    }
+  };
+
   const signin = async (data: TSignIn) => {
     try {
       const response = await axios.post<TSignInResponse>(
@@ -44,7 +58,7 @@ export const ApiContextProvider = ({
       return response.data;
     } catch (err) {
       setError("Error signing in");
-      throw new Error("Error signing in", err as Error);
+      throw new Error("Verify Credentials", err as Error);
     }
   };
 
@@ -147,6 +161,7 @@ export const ApiContextProvider = ({
       value={{
         tasks,
         error,
+        signup,
         signin,
         create,
         getAll,

@@ -8,6 +8,11 @@ interface IUser {
   password: string;
 }
 
+interface ICredentials {
+  email: string;
+  password: string;
+}
+
 const request = supertest(app);
 
 beforeAll(async () => {
@@ -28,7 +33,7 @@ beforeEach(async () => {
 describe("User API Service", () => {
   it("Should register a new User", async () => {
     const user: IUser = {
-      email: "carlos@outlook.com",
+      email: "cristian@outlook.com",
       password: "12345678",
     };
 
@@ -40,7 +45,7 @@ describe("User API Service", () => {
 
   it("Should not register same email address", async () => {
     const user: IUser = {
-      email: "carlos@outlook.com",
+      email: "cristian@outlook.com",
       password: "12345678",
     };
 
@@ -74,120 +79,53 @@ describe("User API Service", () => {
   });
 
   it("Should authenticate a User with correct credentials", async () => {
-    //   const user: IUser = {
-    //     email: "carlos@outlook.com",
-    //     password: "12345678",
-    //   };
-    //   await request.post("/users/auth").send(user);
-    //   const userCredentials: ICredentials = {
-    //     email: "carlos@outlook.com",
-    //     password: "12345678",
-    //   };
-    //   const response = await request.post("/users/auth").send(userCredentials);
-    //   console.log(response.body);
-    //   expect(response.status).toBe(200);
-    //   expect(response.body.data).toHaveProperty(
-    //     "email",
-    //     "carlos@outlook.com"
-    //   );
-    //   expect(response.body.data).toHaveProperty("token");
-    //   expect(response.body.data.token).toMatch(/^.+\..+\..+$/);
-    // });
-    // it("Should not authenticate a User with wrong credentials", async () => {
-    //   const user: ICredentials = {
-    //     email: "gonzalo.romero@outlook.com",
-    //     password: "12344321",
-    //   };
-    //   const response = await request.post("/users/auth").send(user);
-    //   expect(response.status).toBe(400);
-    //   expect(response.body.data).toHaveProperty("error", "Invalid credentials");
-    // });
-    // it("Should not allow empty inputs for authentication", async () => {
-    //   const user: ICredentials = {
-    //     email: "",
-    //     password: "12345678",
-    //   };
-    //   const response = await request.post("/users/auth").send(user);
-    //   expect(response.status).toBe(400);
-    //   expect(response.body.data).toHaveProperty(
-    //     "error",
-    //     '"email" is not allowed to be empty'
-    //   );
-    // });
-  });
-});
-
-describe("Tasks API Service", () => {
-  it("Should create a new Task", async () => {
-    const user = await request.post("/users").send({
-      email: `carlos@outlook.com`,
-      password: "12345678",
-    });
-
-    const loginCredentials = {
-      email: user.body.data.user,
+    const user: IUser = {
+      email: "cristian@outlook.com",
       password: "12345678",
     };
-
-    const authResponse = await request
-      .post("/users/auth")
-      .send(loginCredentials);
-    const token = authResponse.body.data;
-
-    const task = {
-      title: "Coding with TS and NodeJS",
-      description: "Learn more TypeScript and NodeJS",
+    await request.post("/users").send(user);
+    const userCredentials: ICredentials = {
+      email: "cristian@outlook.com",
+      password: "12345678",
     };
-
-    const response = await request
-      .post(`/tasks`)
-      .set("Authorization", `Bearer ${token}`)
-      .send(task);
+    const response = await request.post("/users/auth").send(userCredentials);
     expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("data");
+    expect(response.body.data).toMatch(/^.+\..+\..+$/);
   });
 
-  it("Should not create a Task with invalid schema", async () => {
-    const user = await request.post("/users").send({
-      email: `carlos@outlook.com`,
-      password: "12345678",
-    });
+  it("Should not authenticate a User with wrong credentials", async () => {
+    const user: ICredentials = {
+      email: "cristian@outlook.com",
+      password: "12344321",
+    };
+    const response = await request.post("/users/auth").send(user);
+    expect(response.status).toBe(404);
+  });
 
-    const loginCredentials = {
-      email: user.body.data.user,
+  it("Should not allow empty inputs for authentication", async () => {
+    const user: ICredentials = {
+      email: "",
       password: "12345678",
     };
-
-    const authResponse = await request
-      .post("/users/auth")
-      .send(loginCredentials);
-    const token = authResponse.body.data;
-
-    const task = {
-      title: "",
-      description: "Learn more TypeScript and NodeJS",
-    };
-
-    const response = await request
-      .post(`/tasks`)
-      .set("Authorization", `Bearer ${token}`)
-      .send(task);
-
+    const response = await request.post("/users/auth").send(user);
     expect(response.status).toBe(400);
-
     expect(response.body.errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           msg: "Invalid value",
-          path: "title",
+          path: "email",
         }),
         expect.objectContaining({
-          msg: "Title is required",
-          path: "title",
+          msg: "Invalid email",
+          path: "email",
         }),
       ])
     );
   });
+});
 
+describe("Tasks API Service", () => {
   it("Should Not allow to create a Task without Log In", async () => {
     const task = {
       title: "Coding with TS and NodeJS",
@@ -200,7 +138,109 @@ describe("Tasks API Service", () => {
 
   it("Should Not allow to create a Task with invalid token", async () => {
     const user = await request.post("/users").send({
-      email: `carlos@outlook.com`,
+      email: `cristian@outlook.com`,
+      password: "12345678",
+    });
+
+    const loginCredentials = {
+      email: user.body.data.user,
+      password: "12345678",
+    };
+
+    const authResponse = await request
+      .post("/users/auth")
+      .send(loginCredentials);
+    const token = authResponse.body.data + "Hello!";
+   
+    const task = {
+      title: "",
+      description: "Learn more TypeScript and NodeJS",
+    };
+
+    const response = await request
+      .post(`/tasks`)
+      .set("Authorization", `Bearer ${token}`)
+      .send(task);
+    expect(response.status).toBe(400);
+
+    expect(response.body).toEqual({
+      status: 400,
+      statusMsg: "Bad Request",
+      data: "Invalid token"
+    });
+  });
+
+it("Should Not allow to create a Task with invalid token", async () => {
+  const user = await request.post("/users").send({
+    email: `carlos@outlook.com`,
+    password: "12345678",
+  });
+
+  const loginCredentials = {
+    email: user.body.data.user,
+    password: "12345678",
+  };
+
+  const authResponse = await request
+    .post("/users/auth")
+    .send(loginCredentials);
+  const token = authResponse.body.data.split(" ")[1] + "Hello KeyM!";
+
+  const task = {
+    title: "",
+    description: "Learn more TypeScript and NodeJS",
+  };
+
+  const response = await request
+    .post(`/tasks`)
+    .set("Authorization", `Bearer ${token}`)
+    .send(task);
+    
+  expect(response.status).toBe(400);
+
+  expect(response.body).toHaveProperty("data", "Invalid token");
+});
+
+it("Should GET all the Tasks", async () => {
+  const user = await request.post("/users").send({
+    email: "carlos@outlook.com",
+    password: "12345678",
+  });
+
+  const loginCredentials = {
+    email: user.body.data.user,
+    password: "12345678",
+  };
+
+  const authResponse = await request
+    .post("/users/auth")
+    .send(loginCredentials);
+  const token = authResponse.body.data;
+
+  await request.post("/tasks").set("Authorization", `Bearer ${token}`).send({
+    title: "Test Task",
+    description: "This is a test task",
+  });
+
+  const getResponse = await request
+    .get("/tasks")
+    .set("Authorization", `Bearer ${token}`);
+
+  expect(getResponse.status).toBe(200);
+
+  expect(getResponse.body.data).toBeInstanceOf(Array);
+  expect(getResponse.body.data.length).toBeGreaterThan(0);
+
+  expect(
+    getResponse.body.data.some(
+      (task: any) => task.user === user.body.data.name
+    )
+  ).toBe(true);
+});
+
+  it("Should Not allow to create a Task with invalid token", async () => {
+    const user = await request.post("/users").send({
+      email: `cristian@outlook.com`,
       password: "12345678",
     });
 
@@ -223,7 +263,7 @@ describe("Tasks API Service", () => {
       .post(`/tasks`)
       .set("Authorization", `Bearer ${token}`)
       .send(task);
-      
+
     expect(response.status).toBe(400);
 
     expect(response.body).toHaveProperty("data", "Invalid token");
@@ -231,7 +271,7 @@ describe("Tasks API Service", () => {
 
   it("Should GET all the Tasks", async () => {
     const user = await request.post("/users").send({
-      email: "carlos@outlook.com",
+      email: "cristian@outlook.com",
       password: "12345678",
     });
 
@@ -268,7 +308,7 @@ describe("Tasks API Service", () => {
 
   it("Should GET a Task by Id", async () => {
     const user = await request.post("/users").send({
-      email: "carlos@outlook.com",
+      email: "cristian@outlook.com",
       password: "12345678",
     });
 
@@ -316,7 +356,7 @@ describe("Tasks API Service", () => {
 
   it("Should Delete a Task by Id", async () => {
     const user = await request.post("/users").send({
-      email: "carlos@outlook.com",
+      email: "cristian@outlook.com",
       password: "12345678",
     });
 

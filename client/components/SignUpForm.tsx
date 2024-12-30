@@ -3,12 +3,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { TSignInResponse, TSignIn } from "../types";
 import { useApiContext } from "../context/ApiContext";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export const LogInForm = () => {
-  const { signin } = useApiContext();
+export const SignUpForm = () => {
+  const { signup } = useApiContext();
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,20 +27,14 @@ export const LogInForm = () => {
     setError(null);
 
     try {
-      const result = (await signin(data)) as TSignInResponse;
-
-      if (result?.data) {
-        Cookies.set("token", result.data, { expires: 7, path: "" });
-        setMessage("Logged in successfully!");
-        reset();
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
-      } else {
-        setMessage("Invalid credentials.");
-      }
+      (await signup(data)) as TSignInResponse;
+      setMessage("Registered successfully!");
+      reset();
+      setTimeout(() => {
+        router.push("/signin");
+      }, 1000);
     } catch (err: unknown) {
-  
+   
       let errorMessage = "An unexpected error occurred.";
 
       if (err instanceof Error) {
@@ -86,7 +79,7 @@ export const LogInForm = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <h2 className="text-xl font-semibold text-center text-gray-500">
-          Sign In
+          Sign Up
         </h2>
 
         <div>
@@ -139,12 +132,12 @@ export const LogInForm = () => {
           )}
         </div>
         <span className="flex justify-end text-gray-400">
-          Not registered yet?
+          Already registered?
           <Link
-            href="/signup"
+            href="/signin"
             className="text-orange-400 font-sans font-bold cursor-pointer ml-2"
           >
-            Sign Up
+            Sign In
           </Link>
         </span>
 
