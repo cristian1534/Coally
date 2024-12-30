@@ -4,7 +4,8 @@
   "description": "Backend Service for Coally Test Task.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/app.ts"
+    "dev": "nodemon ./src/app.ts",
+    "test": "jest --detectOpenHandles --forceExit --coverage"
   },
   "author": "Cristian Machuca",
   "license": "MIT",
@@ -17,9 +18,11 @@
     "jwt-simple": "^0.5.6",
     "moment": "^2.30.1",
     "mongoose": "^8.9.2",
+    "supertest": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-themes": "^1.4.3",
     "swagger-ui-express": "^5.0.1",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   },
@@ -29,9 +32,11 @@
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.0",
     "@types/express-validator": "^2.20.33",
+    "@types/jest": "^29.5.14",
     "@types/jwt-simple": "^0.5.36",
     "@types/moment": "^2.11.29",
     "@types/mongoose": "^5.11.96",
+    "@types/supertest": "^6.0.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.7",
     "nodemon": "^3.1.9"

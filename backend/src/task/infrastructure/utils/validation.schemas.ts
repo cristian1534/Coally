@@ -15,12 +15,16 @@ export const createTaskSchema = [
 ];
 
 export const createUserSchema = [
-  body("email").isEmail().normalizeEmail().withMessage("Invalid email"),
+  body("email")
+    .notEmpty()
+    .isEmail()
+    .normalizeEmail()
+    .withMessage("Invalid email"),
   body("password")
+    .notEmpty()
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters long"),
 ];
-
 
 export const handleValidationErrors = (
   req: Request,

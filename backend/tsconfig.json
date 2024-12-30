@@ -10,7 +10,7 @@
     "paths": {
       "*": ["src/*"]
     },                                     
-    "types": ["node"],   
+    "types": ["node", "jest"],
     "resolveJsonModule": true,                         
 
     "outDir": "./build",                         

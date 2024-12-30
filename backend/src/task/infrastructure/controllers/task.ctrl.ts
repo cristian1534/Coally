@@ -17,9 +17,12 @@ export class TaskController {
       }
       return this.httpResponse.Ok(res, task);
     } catch (error) {
-      return this.httpResponse.Error(res, error);
+      if (!res.headersSent) {  
+        return this.httpResponse.Error(res, error);
+      }
     }
   };
+  
 
   public get = async (req: Request, res: Response): Promise<any> => {
     try {

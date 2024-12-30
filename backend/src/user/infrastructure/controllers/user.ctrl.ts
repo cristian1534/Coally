@@ -28,9 +28,11 @@ export class UserController {
         return this.httpResponse.BadRequest(res, "User not created");
       }
 
-      return this.httpResponse.Ok(res, user);
+      return this.httpResponse.Ok(res, { user: user.email});
     } catch (error) {
-      return this.httpResponse.Error(res, error);
+      if (!res.headersSent) {  
+        return this.httpResponse.Error(res, error);
+      }
     }
   };
 
