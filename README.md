@@ -14,7 +14,7 @@ Full stack Frontend and Backend Services.
 
 
 ## 🚀 About Me
-My name is Cristian, currently living in Odessa Ukraine. I am interested in any open position for either Backend NodeJS or FullStack MERN.
+My name is Cristian, I am interested in any open position for either Backend NodeJS or FullStack MERN.
 
 LinkedIn Profile: https://www.linkedin.com/in/cristian-machuca-dev/
 
